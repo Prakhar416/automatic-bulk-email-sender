@@ -1,0 +1,7 @@
+{
+  "email": "user@example.com",
+  "first_name": "John",
+  "last_name": "Doe",
+  "company_name": "Acme Corp",
+  "account_url": "https://example.com/account"
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "email": "alice@example.com",
+    "first_name": "Alice",
+    "last_name": "Smith",
+    "company_name": "Acme Corp",
+    "account_url": "https://example.com/account/alice"
+  },
+  {
+    "email": "bob@example.com",
+    "first_name": "Bob",
+    "company_name": "Acme Corp",
+    "account_url": "https://example.com/account/bob"
+  },
+  {
+    "email": "invalid-email",
+    "first_name": "Charlie",
+    "company_name": "Acme Corp"
+  }
+]
