@@ -7,6 +7,7 @@ from rich.panel import Panel
 from . import __version__
 from .config import load_settings, Settings
 from .logging import setup_logging
+from .recipients_cli import recipients
 
 
 console = Console()
@@ -16,6 +17,9 @@ console = Console()
 def main():
     """Automatic bulk email sender with Gmail/SendGrid integration."""
     pass
+
+
+main.add_command(recipients)
 
 
 @main.command()

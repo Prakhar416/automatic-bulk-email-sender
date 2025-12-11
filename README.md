@@ -150,15 +150,98 @@ logging:
 1. **Enable Gmail API** in your Google Cloud Console
 2. **Create service account** or OAuth2 credentials
 3. **Configure credentials**:
-   ```bash
-   # Service account JSON file path
-   AUTOBULK_GOOGLE_CREDENTIALS_PATH=/path/to/service-account.json
-   
-   # OR OAuth2 credentials
-   AUTOBULK_GOOGLE_CLIENT_ID=your-client-id
-   AUTOBULK_GOOGLE_CLIENT_SECRET=your-client-secret
-   AUTOBULK_GOOGLE_REFRESH_TOKEN=your-refresh-token
-   ```
+    ```bash
+    # Service account JSON file path
+    AUTOBULK_GOOGLE_CREDENTIALS_PATH=/path/to/service-account.json
+
+    # OR OAuth2 credentials
+    AUTOBULK_GOOGLE_CLIENT_ID=your-client-id
+    AUTOBULK_GOOGLE_CLIENT_SECRET=your-client-secret
+    AUTOBULK_GOOGLE_REFRESH_TOKEN=your-refresh-token
+    ```
+
+### Google Sheets Setup
+
+Autobulk can read recipient data from Google Sheets, supporting dynamic data management and real-time updates.
+
+#### Prerequisites
+- A Google Cloud project with Sheets API enabled
+- Service account credentials with Sheets API access
+- A shared Google Sheet with recipient data
+
+#### Step 1: Create a Google Cloud Project and Service Account
+
+1. **Go to [Google Cloud Console](https://console.cloud.google.com/)**
+2. **Create a new project** or select an existing one
+3. **Enable the Google Sheets API:**
+   - Go to APIs & Services → Library
+   - Search for "Google Sheets API"
+   - Click Enable
+
+4. **Create Service Account credentials:**
+   - Go to APIs & Services → Credentials
+   - Click "Create Credentials" → Service Account
+   - Fill in the service account details
+   - Click "Create and Continue"
+   - Grant Editor access (or minimal required permissions)
+   - Click "Continue"
+   - Go to the Service Accounts page
+   - Click on your new service account
+   - Go to Keys tab
+   - Click "Add Key" → "Create new key"
+   - Choose JSON format
+   - The JSON file will be downloaded automatically
+
+#### Step 2: Share the Google Sheet
+
+1. **Open your Google Sheet** containing recipient data
+2. **Share it with the service account email** (found in the JSON key file as `client_email`)
+3. **Grant at least "Viewer" permission** (no need for edit access)
+
+#### Step 3: Configure Autobulk
+
+1. **Store the credentials securely:**
+    ```bash
+    # Option A: Path to credentials file
+    AUTOBULK_GOOGLE_CREDENTIALS_PATH=/secure/path/to/service-account.json
+
+    # Option B: JSON string in environment variable
+    AUTOBULK_GOOGLE_CREDENTIALS_JSON='{"type":"service_account","project_id":"...",...}'
+    ```
+
+2. **Configure the Sheets settings:**
+    ```bash
+    # Google Sheet ID (found in the sheet URL)
+    AUTOBULK_SHEETS_SPREADSHEET_ID=1abc2def3ghi4jkl5mno6pqr7stu8vwx
+
+    # Range to read (e.g., 'Sheet1' or 'Sheet1!A1:Z1000')
+    AUTOBULK_SHEETS_RANGE=Sheet1
+
+    # Required columns (comma-separated or list in YAML)
+    AUTOBULK_SHEETS_REQUIRED_COLUMNS=name,email
+
+    # Cache format for auditing (csv, json, or both)
+    AUTOBULK_SHEETS_CACHE_FORMAT=both
+
+    # Cache directory
+    AUTOBULK_SHEETS_CACHE_DIR=~/.autobulk/cache
+    ```
+
+#### Step 4: Format Your Google Sheet
+
+Your Google Sheet should have at least these columns (case-insensitive):
+- **name**: Recipient's name (required)
+- **email**: Recipient's email address (required)
+- Additional columns for custom fields (optional)
+
+Example sheet:
+```
+| Name          | Email                | Company    | Department |
+|---------------|----------------------|------------|------------|
+| John Doe      | john@example.com     | Acme       | Sales      |
+| Jane Smith    | jane@example.com     | Acme       | Marketing  |
+| Bob Johnson   | bob@example.com      | TechCorp   | Engineering|
+```
 
 ### SendGrid Setup
 
@@ -233,6 +316,39 @@ python -m autobulk test-connection gmail
 python -m autobulk test-connection sendgrid --debug
 ```
 
+### Recipients Management
+
+#### Sync Recipients from Google Sheets
+```bash
+# Basic sync with default configuration
+python -m autobulk recipients sync
+
+# Sync with specific spreadsheet ID
+python -m autobulk recipients sync --spreadsheet-id 1abc2def3ghi4jkl5mno6pqr7stu8vwx
+
+# Preview more rows
+python -m autobulk recipients sync --preview 20
+
+# Skip caching
+python -m autobulk recipients sync --no-cache
+
+# Enable debug logging
+python -m autobulk recipients sync --debug
+```
+
+**Parameters:**
+- `--spreadsheet-id, -s`: Google Sheet ID (optional, can be configured in .env)
+- `--range, -r`: Range to read (default: "Sheet1")
+- `--preview, -p`: Number of rows to preview (default: 5)
+- `--cache/--no-cache`: Whether to cache results (default: cache enabled)
+- `--debug`: Enable debug logging
+
+**Output:**
+- Displays validation errors with row numbers and field names
+- Shows preview of fetched recipients
+- Caches data to CSV and JSON for auditing
+- Reports deduplication statistics
+
 ### Template Management
 ```bash
 python -m autobulk templates
@@ -249,7 +365,11 @@ autobulk/
 │       ├── cli.py                # Click-based CLI commands
 │       ├── config.py             # Configuration management
 │       ├── logging.py            # Logging utilities
-│       └── exceptions.py         # Exception handling
+│       ├── exceptions.py         # Exception handling
+│       ├── sheets.py             # Google Sheets integration
+│       └── recipients_cli.py     # Recipients management CLI
+├── tests/
+│       └── test_sheets.py        # Unit tests for Sheets integration
 ├── templates/                    # Email templates directory
 ├── logs/                        # Log files directory
 ├── .env.example                 # Environment variables template
