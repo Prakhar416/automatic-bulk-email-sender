@@ -1,0 +1,11 @@
+name: Welcome Email
+description: Welcome email for new users
+subject: "Welcome to {{ company_name }}, {{ first_name }}!"
+required_variables:
+  - first_name
+  - company_name
+optional_variables:
+  - last_name
+  - account_url
+has_html: true
+has_text: true
