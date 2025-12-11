@@ -1,0 +1,61 @@
+# Application settings
+app_name: autobulk
+debug: false
+
+# Google API Configuration
+google:
+  # Path to service account JSON file
+  credentials_path: null
+  # Google credentials as JSON string
+  credentials_json: null
+  # OAuth2 credentials
+  client_id: null
+  client_secret: null
+  refresh_token: null
+
+# Gmail API Configuration
+gmail:
+  api_key: null
+  api_secret: null
+  access_token: null
+  refresh_token: null
+
+# SendGrid Configuration
+sendgrid:
+  api_key: your-sendgrid-api-key
+  from_email: your-email@example.com
+  from_name: Your Name
+
+# Scheduling Configuration
+scheduler:
+  timezone: UTC
+  max_concurrent: 10
+  retry_attempts: 3
+  retry_delay: 60
+
+# Template Configuration
+templates:
+  templates_dir: templates
+  default_template: default
+  cache_templates: true
+
+# Email tracking Configuration
+tracking:
+  base_url: https://your-tracking-domain.com
+  enabled: true
+  open_tracking: true
+  click_tracking: true
+
+# Database Configuration
+database:
+  url: sqlite:///autobulk.db
+  echo: false
+
+# Logging Configuration
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_path: logs/autobulk.log
+  max_file_size: 10485760
+  backup_count: 5
+  console_output: true

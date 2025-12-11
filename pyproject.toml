@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "autobulk"
+version = "0.1.0"
+description = "Automatic bulk email sender with Gmail/SendGrid integration"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+packages = [{include = "autobulk", from = "src"}]
+
+[tool.poetry.dependencies]
+python = ">=3.8.1,<4.0"
+typer = "^0.9.0"
+google-api-python-client = "^2.108.0"
+google-auth = "^2.23.0"
+google-auth-oauthlib = "^1.1.0"
+google-auth-httplib2 = "^0.1.1"
+jinja2 = "^3.1.2"
+apscheduler = "^3.10.4"
+sqlalchemy = "^2.0.23"
+requests = "^2.31.0"
+httpx = "^0.25.2"
+python-dotenv = "^1.0.0"
+pyyaml = "^6.0.1"
+pydantic = "^2.5.0"
+pydantic-settings = "^2.0.0"
+rich = "^13.7.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+pytest-asyncio = "^0.21.1"
+black = "^23.11.0"
+isort = "^5.12.0"
+flake8 = "^6.1.0"
+mypy = "^1.7.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
