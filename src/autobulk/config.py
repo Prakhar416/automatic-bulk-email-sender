@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional, Dict, Any
 from functools import lru_cache
 
-from pydantic import Field
+from pydantic import Field, ConfigDict
 from pydantic_settings import BaseSettings
 import yaml
 import json
@@ -20,6 +20,16 @@ class GoogleConfig(BaseSettings):
     client_id: Optional[str] = None
     client_secret: Optional[str] = None
     refresh_token: Optional[str] = None
+
+
+class SheetsConfig(BaseSettings):
+    """Google Sheets configuration."""
+    
+    spreadsheet_id: Optional[str] = Field(None, description="Google Sheet ID to read from")
+    range: str = Field("Sheet1", description="Range to read from (e.g., 'Sheet1' or 'Sheet1!A1:C100')")
+    required_columns: list = Field(default_factory=lambda: ["name", "email"], description="Required column names")
+    cache_format: str = Field("both", description="Cache format: csv, json, or both")
+    cache_dir: Optional[str] = Field(None, description="Directory for caching recipients")
 
 
 class GmailConfig(BaseSettings):
@@ -95,6 +105,7 @@ class Settings(BaseSettings):
     
     # Component configurations
     google: GoogleConfig = Field(default_factory=GoogleConfig)
+    sheets: SheetsConfig = Field(default_factory=SheetsConfig)
     gmail: GmailConfig = Field(default_factory=GmailConfig)
     sendgrid: SendGridConfig = Field(default_factory=SendGridConfig)
     scheduler: SchedulerConfig = Field(default_factory=SchedulerConfig)
@@ -103,9 +114,10 @@ class Settings(BaseSettings):
     database: DatabaseConfig = Field(default_factory=DatabaseConfig)
     logging: LoggingConfig = Field(default_factory=LoggingConfig)
     
-    class Config:
-        env_prefix = "AUTOBULK_"
-        case_sensitive = False
+    model_config = ConfigDict(
+        env_prefix="AUTOBULK_",
+        case_sensitive=False
+    )
 
 
 def _load_env_file(env_file: Path) -> Dict[str, Any]:

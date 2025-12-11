@@ -13,6 +13,21 @@ google:
   client_secret: null
   refresh_token: null
 
+# Google Sheets Configuration
+sheets:
+  # Google Sheet ID to read from
+  spreadsheet_id: null
+  # Range to read from (e.g., 'Sheet1' or 'Sheet1!A1:C100')
+  range: Sheet1
+  # Required column names
+  required_columns:
+    - name
+    - email
+  # Cache format: csv, json, or both
+  cache_format: both
+  # Directory for caching recipients
+  cache_dir: null
+
 # Gmail API Configuration
 gmail:
   api_key: null
