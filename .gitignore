@@ -1,0 +1,42 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+wheelhouse/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.coverage*
+.cache/
+nosetests.xml
+coverage.xml
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.env
+.envrc
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+
+# Local databases / artifacts
+autobulk.db
+*.sqlite3
+
+# Misc
+.DS_Store
